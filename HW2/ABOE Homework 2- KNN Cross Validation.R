@@ -85,7 +85,7 @@ for (k in 1:max.k) {
 	print(table(test.labels1, knn.fit1))
 
 	this.err1 <- sum(test.labels1 != knn.fit1) / length(test.labels1)
-	err.rates <- rbind(err.rates, this.err1)
+	err.rates1 <- rbind(err.rates1, this.err1)
 }
 
 ## Fold 2 ##
@@ -149,7 +149,7 @@ for (k in 1:max.k) {
 ######################################
 
 ## Create a dataframe for each fold containing a list of the K-Values and the corresponding Generalization Error Rates for each K ##
-results1 <- data.frame(1:max.k, err.rates)
+results1 <- data.frame(1:max.k, err.rates1)
 results2 <- data.frame(1:max.k, err.rates2)
 results3 <- data.frame(1:max.k, err.rates3)
 results4 <- data.frame(1:max.k, err.rates4)
@@ -206,3 +206,6 @@ ave5 <- sum(results5$err.rate5) / length(results5$err.rate5)
 
 ## Average the Average Generalization Error Rates to determine the overall Generlaization  Error Rate for my KNN analysis ##
 AveGenError <- (ave1 + ave2 + ave3 + ave4 + ave5) / 5
+cat('\n', 'The Overal Average Generalization Error for this KNN Analysis is',AveGenError, '\n', sep = ' ')
+
+
