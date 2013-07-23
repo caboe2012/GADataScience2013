@@ -1,0 +1,545 @@
+## Naive Bayes Output on HW 3##
+Chads-MacBook-Air:~ caboe$ r
+
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin10.8.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> q()
+Save workspace image? [y/n/c]: n
+Chads-MacBook-Air:~ caboe$ cd r_work
+Chads-MacBook-Air:r_work caboe$ r
+
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin10.8.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> library(e1071)
+Loading required package: class
+> classifer <- naiveBayes(iris[, 1:4], iris[,5])
+> table(predict(classifier, iris[,-5], iris[,5])
++ dnn = list('predicted', 'actual')
+Error: unexpected symbol in:
+"table(predict(classifier, iris[,-5], iris[,5])
+dnn"
+> table(predict(classifier, iris[,-5]), iris[,5], dnn=list('predict', 'actual'))Error in predict(classifier, iris[, -5]) : object 'classifier' not found
+> classifier <- naiveBayes(iris[, 1:4], iris[,5])> table(predict(classifier, iris[,-5]), iris[,5], dnn=list('predict', 'actual'))            actual
+predict      setosa versicolor virginica
+  setosa         50          0         0
+  versicolor      0         47         3
+  virginica       0          3        47
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> classifier$aposteriori
+NULL
+> head(classifier
++ )
+$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+
+$tables
+$tables$Sepal.Length
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+$tables$Sepal.Width
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+$tables$Petal.Width
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+
+$levels
+[1] "setosa"     "versicolor" "virginica" 
+
+$call
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+> classifier
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+A-priori probabilities:
+iris[, 5]
+    setosa versicolor  virginica 
+ 0.3333333  0.3333333  0.3333333 
+
+Conditional probabilities:
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+> 
+> help(naiveBayes)
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> help(naiveBayes)
+> 
+> classifier$a-posterior
+Error: object 'posterior' not found
+> classifier$aposterior
+NULL
+> classifier$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+> df <- iris
+> a <- table(predict(classifier, df[,-5]),df[,5], dnn=list('predict', 'real'))
+> a
+            real
+predict      setosa versicolor virginica
+  setosa         50          0         0
+  versicolor      0         47         3
+  virginica       0          3        47
+> classifier
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+A-priori probabilities:
+iris[, 5]
+    setosa versicolor  virginica 
+ 0.3333333  0.3333333  0.3333333 
+
+Conditional probabilities:
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+> classifier.test1 <- naiveBayes(df[,1:3], df[,5])
+> classifier.test1
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = df[, 1:3], y = df[, 5])
+
+A-priori probabilities:
+df[, 5]
+    setosa versicolor  virginica 
+ 0.3333333  0.3333333  0.3333333 
+
+Conditional probabilities:
+            Sepal.Length
+df[, 5]       [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+            Sepal.Width
+df[, 5]       [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+            Petal.Length
+df[, 5]       [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+> classifier
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+A-priori probabilities:
+iris[, 5]
+    setosa versicolor  virginica 
+ 0.3333333  0.3333333  0.3333333 
+
+Conditional probabilities:
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+> b <- plot(function(x) dnorm(x, 1.462, 0.1736640), 0,8,col="red", main="Petal.Length Distribution for the 3 species")
+> curve(dnorm(x,4.260, 0.4699110),add=TRUE, col="blue")
+> curve(dnorm(x,5.552, 0.5518947),add=TRUE, col="green")
+> help(dnrom)
+No documentation for ‘dnrom’ in specified packages and libraries:
+you could try ‘??dnrom’
+> help(dnorm)
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> classifier$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+> classifier$tables$Petal.Width
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+> classifier
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+A-priori probabilities:
+iris[, 5]
+    setosa versicolor  virginica 
+ 0.3333333  0.3333333  0.3333333 
+
+Conditional probabilities:
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+> classifier$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> classifier$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+> classifier
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+A-priori probabilities:
+iris[, 5]
+    setosa versicolor  virginica 
+ 0.3333333  0.3333333  0.3333333 
+
+Conditional probabilities:
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+> head(classifier)
+$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+
+$tables
+$tables$Sepal.Length
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+
+$tables$Sepal.Width
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+
+$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+
+$tables$Petal.Width
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+
+
+$levels
+[1] "setosa"     "versicolor" "virginica" 
+
+$call
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+
+> classifier$call
+naiveBayes.default(x = iris[, 1:4], y = iris[, 5])
+> plot(classifier$call)
+Error in xy.coords(x, y, xlabel, ylabel, log) : invalid first argument
+> plot(df, classifier$call)
+> plot(df, x=classifier$tables, y=iris[,5]) 
+Error in xy.coords(x, y, xlabel, ylabel, log) : 
+  'x' and 'y' lengths differ
+> plot(df, x=classifier$tables$Sepal.Length, y=iris[,5]) 
+Error in xy.coords(x, y, xlabel, ylabel, log) : 
+  'x' and 'y' lengths differ
+> length(classifier$tables$Sepal.Length)
+[1] 6
+> length(iris[,5])
+[1] 150
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> iris[,5]
+  [1] setosa     setosa     setosa     setosa     setosa     setosa    
+  [7] setosa     setosa     setosa     setosa     setosa     setosa    
+ [13] setosa     setosa     setosa     setosa     setosa     setosa    
+ [19] setosa     setosa     setosa     setosa     setosa     setosa    
+ [25] setosa     setosa     setosa     setosa     setosa     setosa    
+ [31] setosa     setosa     setosa     setosa     setosa     setosa    
+ [37] setosa     setosa     setosa     setosa     setosa     setosa    
+ [43] setosa     setosa     setosa     setosa     setosa     setosa    
+ [49] setosa     setosa     versicolor versicolor versicolor versicolor
+ [55] versicolor versicolor versicolor versicolor versicolor versicolor
+ [61] versicolor versicolor versicolor versicolor versicolor versicolor
+ [67] versicolor versicolor versicolor versicolor versicolor versicolor
+ [73] versicolor versicolor versicolor versicolor versicolor versicolor
+ [79] versicolor versicolor versicolor versicolor versicolor versicolor
+ [85] versicolor versicolor versicolor versicolor versicolor versicolor
+ [91] versicolor versicolor versicolor versicolor versicolor versicolor
+ [97] versicolor versicolor versicolor versicolor virginica  virginica 
+[103] virginica  virginica  virginica  virginica  virginica  virginica 
+[109] virginica  virginica  virginica  virginica  virginica  virginica 
+[115] virginica  virginica  virginica  virginica  virginica  virginica 
+[121] virginica  virginica  virginica  virginica  virginica  virginica 
+[127] virginica  virginica  virginica  virginica  virginica  virginica 
+[133] virginica  virginica  virginica  virginica  virginica  virginica 
+[139] virginica  virginica  virginica  virginica  virginica  virginica 
+[145] virginica  virginica  virginica  virginica  virginica  virginica 
+Levels: setosa versicolor virginica
+> classifier$tables$Petal.Length
+            Petal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     1.462 0.1736640
+  versicolor 4.260 0.4699110
+  virginica  5.552 0.5518947
+> classifier$apriori
+iris[, 5]
+    setosa versicolor  virginica 
+        50         50         50 
+> classifier$tables$Petal.Width
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+> classifier$tables$Sepal.Length
+            Sepal.Length
+iris[, 5]     [,1]      [,2]
+  setosa     5.006 0.3524897
+  versicolor 5.936 0.5161711
+  virginica  6.588 0.6358796
+> classifier$tables$Sepal.Width
+            Sepal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     3.428 0.3790644
+  versicolor 2.770 0.3137983
+  virginica  2.974 0.3224966
+> classifier$tables$Petal.Width
+            Petal.Width
+iris[, 5]     [,1]      [,2]
+  setosa     0.246 0.1053856
+  versicolor 1.326 0.1977527
+  virginica  2.026 0.2746501
+> 
+> ## Create a Normalized Distribution plot for the Petal Length Distribution of the 3 diff species ##
+> 
+> ## 1st, create the plot for the Setosa plants ##
+> plot(function(x) dnorm(x, 0.246, 0.1053856), 0, 8, col="red", main="Petal Width distribution for the 3 different species")
+> 
+> ## 2nd, add a curve for the Versicolor ##
+> curve(dnorm(x, 1.326, 0.1977527), add=TRUE, col="blue")
+> 
+> ## Finally, add a curve for the Virginica ##
+> curve(dnorm(x, 2.026, 0.2746501), add=TRUE, col = "green")
+> plot(function(x) dnorm(x, 5.006, 0.3524897), 0, 8, col="red", main="Sepal length distribution for the 3 different species")
+> 
+> ## 2nd, add a curve for the Versicolor ##
+> curve(dnorm(x, 5.936, 0.5161711), add=TRUE, col="blue")
+> 
+> ## Finally, add a curve for the Virginica ##
+> curve(dnorm(x, 6.588, 0.6358796), add=TRUE, col = "green")
+> plot(function(x) dnorm(x, 3.428, 0.3790644), 0, 8, col="red", main="Sepal Width distribution for the 3 different species")
+> 
+> ## 2nd, add a curve for the Versicolor ##
+> curve(dnorm(x, 2.770, 0.3137983), add=TRUE, col="blue")
+> 
+> ## Finally, add a curve for the Virginica ##
+> curve(dnorm(x, 2.974, 0.3224966), add=TRUE, col = "green")
+> 
