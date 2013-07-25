@@ -1,8 +1,5 @@
 ### HW 3 - Naive Bayes Classifier with Cross Validation (5-Fold Hard Coded) ###
 
-## Remove all previously loaded objects/variables that may interfere with current analysis ##
-rm(list=ls(all=TRUE))
-
 ######################
 ### Pre-processing ###
 ######################
