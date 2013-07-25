@@ -1,0 +1,753 @@
+Last login: Wed Jul 24 17:19:44 on ttys000
+Chads-MacBook-Air:~ caboe$ cd r_work
+Chads-MacBook-Air:r_work caboe$ r
+
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin10.8.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> ### HW 3 - Naive Bayes Classifier with Cross Validation (5-Fold Hard Coded) ###
+> 
+> ## Remove all previously loaded objects/variables that may interfere with current analysis ##
+> rm(list=ls(all=TRUE))
+> 
+> ######################
+> ### Pre-processing ###
+> ######################
+> 
+> ## load the NaiveBayes package e0171 from the library ##
+> library("e1071")
+Loading required package: class
+
+## Set the "data" variable to the "iris" dataset that comes preloaded in R ##
+data <- iris
+
+################################################
+## Create Training/Test Splits on the dataset ##
+################################################
+## Initiate the randomization by setting the seed ##
+set.seed(072413)
+
+N <- nrow(data)
+
+randomize <- sample(1:N)
+
+train.attributes1 <- data[-randomize[1:30],-5]
+train.labels1 <- data[-randomize[1:30], 5]
+test.attributes1 <- data[randomize[1:30], -5]
+test.labels1 <- data[randomize[1:30], 5]
+
+train.attributes2 <- data[-randomize[31:60],-5]
+train.labels2 <- data[-randomize[31:60], 5]
+test.attributes2 <- data[randomize[31:60], -5]
+test.labels2 <- data[randomize[31:60], 5]
+
+train.attributes3 <- data[-randomize[61:90],-5]
+train.labels3 <- data[-randomize[61:90], 5]
+test.attributes3 <- data[randomize[61:90], -5]
+test.labels3 <- data[randomize[61:90], 5]
+
+train.attributes4 <- data[-randomize[91:120],-5]
+train.labels4 <- data[-randomize[91:120], 5]
+tes> 
+> ## Set the "data" variable to the "iris" dataset that comes preloaded in R ##
+> data <- iris
+> 
+> ################################################
+> ## Create Training/Test Splits on the dataset ##
+> ################################################
+> ## Initiate the randomization by setting the seed ##
+> set.seed(072413)
+> 
+> N <- nrow(data)
+> 
+> randomize <- sample(1:N)
+> 
+> train.attributes1 <- data[-randomize[1:30],-5]
+> train.labels1 <- data[-randomize[1:30], 5]
+> test.attributes1 <- data[randomize[1:30], -5]
+> test.labels1 <- data[randomize[1:30], 5]
+> 
+> train.attributes2 <- data[-randomize[31:60],-5]
+> train.labels2 <- data[-randomize[31:60], 5]
+> test.attributes2 <- data[randomize[31:60], -5]
+> test.labels2 <- data[randomize[31:60], 5]
+> 
+> train.attributes3 <- data[-randomize[61:90],-5]
+> train.labels3 <- data[-randomize[61:90], 5]
+> test.attributes3 <- data[randomize[61:90], -5]
+> test.labels3 <- data[randomize[61:90], 5]
+> 
+> train.attributes4 <- data[-randomize[91:120],-5]
+> train.labels4 <- data[-randomize[91:120], 5]
+> test.attributes4 <- data[randomize[91:120], -5]
+> test.labels4 <- data[randomize[91:120], 5]
+> 
+> train.attributes5 <- data[-randomize[121:150],-5]
+> train.labels5 <- data[-randomize[121:150], 5]
+> test.attributes5 <- data[randomize[121:150], -5]
+> test.labels5 <- data[randomize[121:150], 5]
+> 
+> ##################################
+> ### APPLY THE NAIVEBAYES MODEL ###
+> ##################################
+> ##############
+> ### Fold 1 ###
+> ##############
+> ### Run the NaiveBayes function on the 1st training set to determine the probablity distributions for the four attributes of each flower class ###
+> classifier1 <- naiveBayes(train.attributes1, train.labels1)
+> classifier1
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = train.attributes1, y = train.labels1)
+
+A-priori probabilities:
+train.labels1
+    setosa versicolor  virginica 
+ 0.3166667  0.3500000  0.3333333 
+
+Conditional probabilities:
+             Sepal.Length
+train.labels1     [,1]      [,2]
+   setosa     5.023684 0.3348531
+   versicolor 5.928571 0.5171619
+   virginica  6.595000 0.6563106
+
+             Sepal.Width
+train.labels1     [,1]      [,2]
+   setosa     3.450000 0.3811434
+   versicolor 2.761905 0.3146445
+   virginica  2.960000 0.3514074
+
+             Petal.Length
+train.labels1     [,1]      [,2]
+   setosa     1.471053 0.1722787
+   versicolor 4.264286 0.4843006
+   virginica  5.562500 0.5508443
+
+             Petal.Width
+train.labels1      [,1]       [,2]
+   setosa     0.2421053 0.09192117
+   versicolor 1.3190476 0.20391066
+   virginica  2.0175000 0.29516401
+
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 1st training set in order to determine Fold 1 Training Error (total and rate) ###
+> train.results1 <- table(predict(classifier1, train.attributes1), train.labels1, dnn=list('predicted', 'actual'))
+train.results1
+train.predict1 <- predict(classifier1, train.attributes1)
+train.err.totals1 <- sum(as.numeric(train.predict1 != train.labels1))
+train.err.totals1
+train.err.rate1 <- train.err.totals1 / length(train.labels1)
+train.err.rate1
+
+### Apply the NaiveBayes Classifier distributions to the 1st test set in order to determine Fold 1 Generalization Error (total and rate) ###
+test.results1 <- table(predict(classifier1, test.attributes1), test.labels1, dnn=list('predicted', 'actual'))
+test.results1
+test.predict1 <- predict(classifier1, test.attributes1)
+gen.err.totals1 <- sum(as.numeric(test.predict1 != test.labels1))
+gen.err.totals1
+gen.err.rate1 <- gen.err.totals1 / length(test.labels1)
+gen.err.rate1
+
+##############
+### Fold 2 ###
+##############
+### Run the NaiveBayes function on the 2nd training set to determine the probablity distributions for the four attributes of each flower class ###
+classifier2 <- naiveBayes(train.attributes2, train.labels2)
+classifier2
+
+### Apply the NaiveBaye> train.results1
+            actual
+predicted    setosa versicolor virginica
+  setosa         38          0         0
+  versicolor      0         39         3
+  virginica       0          3        37
+> train.predict1 <- predict(classifier1, train.attributes1)
+> train.err.totals1 <- sum(as.numeric(train.predict1 != train.labels1))
+> train.err.totals1
+[1] 6
+> train.err.rate1 <- train.err.totals1 / length(train.labels1)
+> train.err.rate1
+[1] 0.05
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 1st test set in order to determine Fold 1 Generalization Error (total and rate) ###
+> test.results1 <- table(predict(classifier1, test.attributes1), test.labels1, dnn=list('predicted', 'actual'))
+> test.results1
+test.predict1 <- predict(classifier1, test.attributes1)
+gen.err.totals1 <- sum(as.numeric(test.predict1 != test.labels1))
+gen.err.totals1
+gen.err.rate1 <- gen.err.totals1 / length(test.labels1)
+gen.err.rate1
+
+##############
+### Fold 2 ###
+##############
+### Run the NaiveBayes function on the 2nd training set to determine the probablity distributions for the four attributes of each flower class ###
+classifier2 <- naiveBayes(train.attributes2, train.labels2)
+classifier2
+
+### Apply the NaiveBayes Classifier distributions to the 2nd training set in order to determine Fold 2 Training Error (total and rate) ###
+train.results2 <- table(predict(classifier2, train.attributes2), train.labels2, dnn=list('predicted', 'actual'))
+train.results2
+train.predict2 <- predict(classifier2, train.attributes2)
+train.err.totals2 <- sum(as.numeric(train.predict2 != train.labels2))
+train.err.totals2
+train.err.rate2 <- train.err.totals2 / length(train.labels2)
+train.err.rate2
+
+### Apply the NaiveBayes Classifier d            actual
+predicted    setosa versicolor virginica
+  setosa         12          0         0
+  versicolor      0          8         0
+  virginica       0          0        10
+> test.predict1 <- predict(classifier1, test.attributes1)
+> gen.err.totals1 <- sum(as.numeric(test.predict1 != test.labels1))
+> gen.err.totals1
+[1] 0
+> gen.err.rate1 <- gen.err.totals1 / length(test.labels1)
+> gen.err.rate1
+[1] 0
+> 
+> ##############
+> ### Fold 2 ###
+> ##############
+> ### Run the NaiveBayes function on the 2nd training set to determine the probablity distributions for the four attributes of each flower class ###
+> classifier2 <- naiveBayes(train.attributes2, train.labels2)
+> classifier2
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = train.attributes2, y = train.labels2)
+
+A-priori probabilities:
+train.labels2
+    setosa versicolor  virginica 
+ 0.3750000  0.3166667  0.3083333 
+
+Conditional probabilities:
+             Sepal.Length
+train.labels2     [,1]      [,2]
+   setosa     5.000000 0.3384456
+   versicolor 5.915789 0.5053906
+   virginica  6.564865 0.6351799
+
+             Sepal.Width
+train.labels2     [,1]      [,2]
+   setosa     3.417778 0.3663635
+   versicolor 2.792105 0.3282892
+   virginica  3.029730 0.3222015
+
+             Petal.Length
+train.labels2     [,1]      [,2]
+   setosa     1.453333 0.1752920
+   versicolor 4.281579 0.4625752
+   virginica  5.545946 0.5674478
+
+             Petal.Width
+train.labels2      [,1]      [,2]
+   setosa     0.2422222 0.1055050
+   versicolor 1.3394737 0.2086501
+   virginica  2.0324324 0.2506149
+
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 2nd training set in order to determine Fold 2 Training Error (total and rate) ###
+> train.results2 <- table(predict(classifier2, train.attributes2), train.labels2, dnn=list('predicted', 'actual'))
+> train.results2
+            actual
+predicted    setosa versicolor virginica
+  setosa         45          0         0
+  versicolor      0         36         2
+  virginica       0          2        35
+> train.predict2 <- predict(classifier2, train.attributes2)
+train.err.totals2 <- sum(as.numeric(train.predict2 != train.labels2))
+train.err.totals2
+train.err.rate2 <- train.err.totals2 / length(train.labels2)
+train.err.rate2
+
+### Apply the NaiveBayes Classifier distributions to the 2nd test set in order to determine Fold 2 Generalization Error (total and rate) ###
+test.results2 <- table(predict(classifier2, test.attributes2), test.labels2, dnn=list('predicted', 'actual'))
+test.results2
+test.predict2 <- predict(classifier2, test.attributes2)
+gen.err.totals2 <- sum(as.numeric(test.predict2 != test.labels2))
+gen.err.totals2
+gen.err.rate2 <- gen.err.totals2 / length(test.labels2)
+gen.err.rate2
+
+##############
+### Fold 3 ###
+##############
+### Run the NaiveBayes function on the 3rd training set to determine the probablity distributions for the four attributes of each flower class ###
+classifier3 <- naiveBayes(train.attributes3, train.labels3)
+classifier3
+
+### Apply the NaiveBayes Classifier distributions to the 3rd training set in order to determine Fo> train.err.totals2 <- sum(as.numeric(train.predict2 != train.labels2))
+> train.err.totals2
+[1] 4
+> train.err.rate2 <- train.err.totals2 / length(train.labels2)
+> train.err.rate2
+[1] 0.03333333
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 2nd test set in order to determine Fold 2 Generalization Error (total and rate) ###
+> test.results2 <- table(predict(classifier2, test.attributes2), test.labels2, dnn=list('predicted', 'actual'))
+> test.results2
+            actual
+predicted    setosa versicolor virginica
+  setosa          5          0         0
+  versicolor      0         12         2
+  virginica       0          0        11
+> test.predict2 <- predict(classifier2, test.attributes2)
+> gen.err.totals2 <- sum(as.numeric(test.predict2 != test.labels2))
+> gen.err.totals2
+[1] 2
+> gen.err.rate2 <- gen.err.totals2 / length(test.labels2)
+> gen.err.rate2
+[1] 0.06666667
+> 
+> ##############
+> ### Fold 3 ###
+> ##############
+> ### Run the NaiveBayes function on the 3rd training set to determine the probablity distributions for the four attributes of each flower class ###
+> classifier3 <- naiveBayes(train.attributes3, train.labels3)
+> classifier3
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = train.attributes3, y = train.labels3)
+
+A-priori probabilities:
+train.labels3
+    setosa versicolor  virginica 
+ 0.3250000  0.3166667  0.3583333 
+
+Conditional probabilities:
+             Sepal.Length
+train.labels3     [,1]      [,2]
+   setosa     5.010256 0.3690634
+   versicolor 5.994737 0.5156719
+   virginica  6.602326 0.6660074
+
+             Sepal.Width
+train.labels3     [,1]      [,2]
+   setosa     3.453846 0.3560353
+   versicolor 2.789474 0.3073773
+   virginica  2.974419 0.3338755
+
+             Petal.Length
+train.labels3     [,1]      [,2]
+   setosa     1.453846 0.1699011
+   versicolor 4.268421 0.4405802
+   virginica  5.565116 0.5731632
+
+             Petal.Width
+train.labels3      [,1]      [,2]
+   setosa     0.2384615 0.1066608
+   versicolor 1.3368421 0.1978548
+   virginica  2.0325581 0.2670125
+
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 3rd training set in order to determine Fold 3 Training Error (total and rate) ###
+> train.results3 <- table(predict(classifier3, train.attributes3), train.labels3, dnn=list('predicted', 'actual'))
+> train.results3
+            actual
+predicted    setosa versicolor virginica
+  setosa         39          0         0
+  versicolor      0         36         2
+  virginica       0          2        41
+> train.predict3 <- predict(classifier3, train.attributes3)
+train.err.totals3 <- sum(as.numeric(train.predict3 != train.labels3))
+train.err.totals3
+train.err.rate3 <- train.err.totals3 / length(train.labels3)
+train.err.rate3
+
+### Apply the NaiveBayes Classifier distributions to the 3rd test set in order to determine Fold 3 Generalization Error (total and rate) ###
+test.results3 <- table(predict(classifier3, test.attributes3), test.labels3, dnn=list('predicted', 'actual'))
+test.results3
+test.predict3 <- predict(classifier3, test.attributes3)
+gen.err.totals3 <- sum(as.numeric(test.predict3 != test.labels3))
+gen.err.totals3
+gen.err.rate3 <- gen.err.totals3 / length(test.labels3)
+gen.err.rate3
+
+##############
+### Fold 4 ###
+##############
+### Run the NaiveBayes function on the 3rd training set to determine the probablity distributions for the four attributes of each flower class ###
+classifier4 <- naiveBayes(train.attributes4, train.labels4)
+classifier4
+
+### Apply the NaiveBayes Classifier distributions to the 3rd training set in order to determine Fo> train.err.totals3 <- sum(as.numeric(train.predict3 != train.labels3))
+> train.err.totals3
+[1] 4
+> train.err.rate3 <- train.err.totals3 / length(train.labels3)
+> train.err.rate3
+[1] 0.03333333
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 3rd test set in order to determine Fold 3 Generalization Error (total and rate) ###
+> test.results3 <- table(predict(classifier3, test.attributes3), test.labels3, dnn=list('predicted', 'actual'))
+> test.results3
+            actual
+predicted    setosa versicolor virginica
+  setosa         11          0         0
+  versicolor      0         12         1
+  virginica       0          0         6
+> test.predict3 <- predict(classifier3, test.attributes3)
+> gen.err.totals3 <- sum(as.numeric(test.predict3 != test.labels3))
+> gen.err.totals3
+[1] 1
+> gen.err.rate3 <- gen.err.totals3 / length(test.labels3)
+> gen.err.rate3
+[1] 0.03333333
+> 
+> ##############
+> ### Fold 4 ###
+> ##############
+> ### Run the NaiveBayes function on the 3rd training set to determine the probablity distributions for the four attributes of each flower class ###
+> classifier4 <- naiveBayes(train.attributes4, train.labels4)
+> classifier4
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = train.attributes4, y = train.labels4)
+
+A-priori probabilities:
+train.labels4
+    setosa versicolor  virginica 
+ 0.3333333  0.3166667  0.3500000 
+
+Conditional probabilities:
+             Sepal.Length
+train.labels4     [,1]      [,2]
+   setosa     4.985000 0.3482925
+   versicolor 5.918421 0.5077003
+   virginica  6.547619 0.6243975
+
+             Sepal.Width
+train.labels4     [,1]      [,2]
+   setosa     3.402500 0.3758665
+   versicolor 2.742105 0.3309541
+   virginica  2.947619 0.3062265
+
+             Petal.Length
+train.labels4     [,1]      [,2]
+   setosa     1.457500 0.1692934
+   versicolor 4.273684 0.5054750
+   virginica  5.504762 0.5516947
+
+             Petal.Width
+train.labels4     [,1]      [,2]
+   setosa     0.252500 0.1109111
+   versicolor 1.336842 0.2071963
+   virginica  2.021429 0.2833043
+
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 3rd training set in order to determine Fold 3 Training Error (total and rate) ###
+> train.results4 <- table(predict(classifier4, train.attributes4), train.labels4, dnn=list('predicted', 'actual'))
+> train.results4
+            actual
+predicted    setosa versicolor virginica
+  setosa         40          0         0
+  versicolor      0         35         4
+  virginica       0          3        38
+> train.predict4 <- predict(classifier4, train.attributes4)
+train.err.totals4 <- sum(as.numeric(train.predict4 != train.labels4))
+train.err.totals4
+train.err.rate4 <- train.err.totals4 / length(train.labels4)
+train.err.rate4
+
+### Apply the NaiveBayes Classifier distributions to the 3rd test set in order to determine Fold 3 Generalization Error (total and rate) ###
+test.results4 <- table(predict(classifier4, test.attributes4), test.labels4, dnn=list('predicted', 'actual'))
+test.results4
+test.predict4 <- predict(classifier4, test.attributes4)
+gen.err.totals4 <- sum(as.numeric(test.predict4 != test.labels4))
+gen.err.totals4
+gen.err.rate4 <- gen.err.totals4 / length(test.labels4)
+gen.err.rate4
+
+##############
+### Fold 5 ###
+##############
+### Run the NaiveBayes function on the 3rd training set to determine the probablity distributions for the four attributes of each flower class ###
+classifier5 <- naiveBayes(train.attributes5, train.labels5)
+classifier5
+
+### Apply the NaiveBayes Classifier distributions to the 3rd training set in order to determine Fo> train.err.totals4 <- sum(as.numeric(train.predict4 != train.labels4))
+> train.err.totals4
+[1] 7
+> train.err.rate4 <- train.err.totals4 / length(train.labels4)
+> train.err.rate4
+[1] 0.05833333
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 3rd test set in order to determine Fold 3 Generalization Error (total and rate) ###
+> test.results4 <- table(predict(classifier4, test.attributes4), test.labels4, dnn=list('predicted', 'actual'))
+> test.results4
+            actual
+predicted    setosa versicolor virginica
+  setosa         10          0         0
+  versicolor      0         12         0
+  virginica       0          0         8
+> test.predict4 <- predict(classifier4, test.attributes4)
+> gen.err.totals4 <- sum(as.numeric(test.predict4 != test.labels4))
+> gen.err.totals4
+[1] 0
+> gen.err.rate4 <- gen.err.totals4 / length(test.labels4)
+> gen.err.rate4
+[1] 0
+> 
+> ##############
+> ### Fold 5 ###
+> ##############
+> ### Run the NaiveBayes function on the 3rd training set to determine the probablity distributions for the four attributes of each flower class ###
+> classifier5 <- naiveBayes(train.attributes5, train.labels5)
+> classifier5
+
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = train.attributes5, y = train.labels5)
+
+A-priori probabilities:
+train.labels5
+    setosa versicolor  virginica 
+ 0.3166667  0.3666667  0.3166667 
+
+Conditional probabilities:
+             Sepal.Length
+train.labels5     [,1]      [,2]
+   setosa     5.013158 0.3757307
+   versicolor 5.925000 0.5340172
+   virginica  6.631579 0.5959799
+
+             Sepal.Width
+train.labels5     [,1]      [,2]
+   setosa     3.418421 0.4183980
+   versicolor 2.765909 0.2909033
+   virginica  2.963158 0.2917061
+
+             Petal.Length
+train.labels5     [,1]      [,2]
+   setosa     1.476316 0.1822297
+   versicolor 4.218182 0.4576343
+   virginica  5.584211 0.5159752
+
+             Petal.Width
+train.labels5      [,1]      [,2]
+   setosa     0.2552632 0.1107648
+   versicolor 1.3022727 0.1718418
+   virginica  2.0263158 0.2767419
+
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 3rd training set in order to determine Fold 3 Training Error (total and rate) ###
+> train.results5 <- table(predict(classifier5, train.attributes5), train.labels5, dnn=list('predicted', 'actual'))
+> train.results5
+            actual
+predicted    setosa versicolor virginica
+  setosa         38          0         0
+  versicolor      0         43         2
+  virginica       0          1        36
+> train.predict5 <- predict(classifier5, train.attributes5)
+> train.err.totals5 <- sum(as.numeric(train.predict5 != train.labels5))
+> train.err.totals5
+[1] 3
+> train.err.rate5 <- train.err.totals5 / length(train.labels5)
+> train.err.rate5
+[1] 0.025
+> 
+> ### Apply the NaiveBayes Classifier distributions to the 3rd test set in order to determine Fold 3 Generalization Error (total and rate) ###
+> test.results5 <- table(predict(classifier5, test.attributes5), test.labels5, dnn=list('predicted', 'actual'))
+> test.results5
+            actual
+predicted    setosa versicolor virginica
+  setosa         12          0         0
+  versicolor      0          4         1
+  virginica       0          2        11
+> test.predict5 <- predict(classifier5, test.attributes5)
+> gen.err.totals5 <- sum(as.numeric(test.predict5 != test.labels5))
+> gen.err.totals5
+[1] 3
+> gen.err.rate5 <- gen.err.totals5 / length(test.labels5)
+> gen.err.rate5
+[1] 0.1
+> 
+> 
+> #######################################
+> ### OUTPUT THE RESULTS ONTO A GRAPH ###
+> #######################################
+> ###Fold 1 Graphs for Petal Length Distributin Probabilties ###
+> classifier1$tables$Petal.Length
+             Petal.Length
+train.labels1     [,1]      [,2]
+   setosa     1.471053 0.1722787
+   versicolor 4.264286 0.4843006
+   virginica  5.562500 0.5508443
+> ## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+> plot(function(x) dnorm(x, 1.471053, 0.1722787), 0, 8, col="red", main="Petal length distribution: Fold 1")
+## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+curve(dnorm(x, 4.264286, 0.4843006), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.562500, 0.5508443 ), add=TRUE, col = "green")
+
+
+###Fold 2 Graphs for Petal Length Distributin Probabilties ###
+classifier2$tables$Petal.Length
+## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+plot(function(x) dnorm(x, 1.453333, 0.1752920), 0, 8, col="red", main="Petal length distribution: Fold 2")
+## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+curve(dnorm(x, 4.281579, 0.4625752), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.54> ## Next, create the plot for the distribution probabilty raength attribute of the Versicolor plants ##
+> curve(dnorm(x, 4.264286, 0.4843006), add=TRUE, col="blue")
+> ## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+> curve(dnorm(x, 5.562500, 0.5508443 ), add=TRUE, col = "green")
+> 
+> 
+> ###Fold 2 Graphs for Petal Length Distributin Probabilties ###
+> classifier2$tables$Petal.Length
+             Petal.Length
+train.labels2     [,1]      [,2]
+   setosa     1.453333 0.1752920
+   versicolor 4.281579 0.4625752
+   virginica  5.545946 0.5674478
+> ## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+> plot(function(x) dnorm(x, 1.453333, 0.1752920), 0, 8, col="red", main="Petal length distribution: Fold 2")
+> ## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+> curve(dnorm(x, 4.281579, 0.4625752), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.545946, 0.5674478), add=TRUE, col = "green")
+
+
+###Fold 3 Graphs for Petal Length Distributin Probabilties ###
+classifier3$tables$Petal.Length
+## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+plot(function(x) dnorm(x, 1.453846, 0.1699011), 0, 8, col="red", main="Petal length distribution: Fold 3")
+## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+curve(dnorm(x, 4.268421, 0.4405802), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.565116, 0.5731632), add=TRUE, col = "green")
+
+
+###Fold 4 Graphs for Petal Length Distributin Probabilties ###
+classifier4$tables$Petal.Length
+## 1st, create the plot for the distrib> ## Finally create the plot for the dist Length attribute of the Virginica plants ##
+> curve(dnorm(x, 5.545946, 0.5674478), add=TRUE, col = "green")
+> 
+> 
+> ###Fold 3 Graphs for Petal Length Distributin Probabilties ###
+> classifier3$tables$Petal.Length
+             Petal.Length
+train.labels3     [,1]      [,2]
+   setosa     1.453846 0.1699011
+   versicolor 4.268421 0.4405802
+   virginica  5.565116 0.5731632
+> ## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+> plot(function(x) dnorm(x, 1.453846, 0.1699011), 0, 8, col="red", main="Petal length distribution: Fold 3")
+> ## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+> curve(dnorm(x, 4.268421, 0.4405802), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.565116, 0.5731632), add=TRUE, col = "green")
+
+
+###Fold 4 Graphs for Petal Length Distributin Probabilties ###
+classifier4$tables$Petal.Length
+## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+plot(function(x) dnorm(x, 1.457500, 0.1692934), 0, 8, col="red", main="Petal length distribution : Fold 4")
+## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+curve(dnorm(x, 4.273684, 0.5054750), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.504762, 0.5516947), add=TRUE, col = "green")
+
+
+###Fold 5 Graphs for Petal Length Distributin Probabilties ###
+classifier5$tables$Petal.Length
+## 1st, create the plot for the distri> ## Finally create the plot for the distr Length attribute of the Virginica plants ##
+> curve(dnorm(x, 5.565116, 0.5731632), add=TRUE, col = "green")
+> 
+> 
+> ###Fold 4 Graphs for Petal Length Distributin Probabilties ###
+> classifier4$tables$Petal.Length
+             Petal.Length
+train.labels4     [,1]      [,2]
+   setosa     1.457500 0.1692934
+   versicolor 4.273684 0.5054750
+   virginica  5.504762 0.5516947
+> ## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+> plot(function(x) dnorm(x, 1.457500, 0.1692934), 0, 8, col="red", main="Petal length distribution : Fold 4")
+> ## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+> curve(dnorm(x, 4.273684, 0.5054750), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.504762, 0.5516947), add=TRUE, col = "green")
+
+
+###Fold 5 Graphs for Petal Length Distributin Probabilties ###
+classifier5$tables$Petal.Length
+## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+plot(function(x) dnorm(x, 1.476316, 0.1822297), 0, 8, col="red", main="Petal length distribution : Fold 5")
+## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+curve(dnorm(x, 4.218182, 0.4576343), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.584211, 0.5159752 ), add=TRUE, col = "green")
+
+
+###############################################
+### Average of the 5 Generalization Errors ####
+####################################> ## Finally create the plot for the distrib Length attribute of the Virginica plants ##
+> curve(dnorm(x, 5.504762, 0.5516947), add=TRUE, col = "green")
+> 
+> 
+> ###Fold 5 Graphs for Petal Length Distributin Probabilties ###
+> classifier5$tables$Petal.Length
+             Petal.Length
+train.labels5     [,1]      [,2]
+   setosa     1.476316 0.1822297
+   versicolor 4.218182 0.4576343
+   virginica  5.584211 0.5159752
+> ## 1st, create the plot for the distribution probabilty range for the Petal Length attribute of the Setosa plants ##
+> plot(function(x) dnorm(x, 1.476316, 0.1822297), 0, 8, col="red", main="Petal length distribution : Fold 5")
+> ## Next, create the plot for the distribution probabilty range for the Petal Length attribute of the Versicolor plants ##
+> curve(dnorm(x, 4.218182, 0.4576343), add=TRUE, col="blue")
+## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+curve(dnorm(x, 5.584211, 0.5159752 ), add=TRUE, col = "green")
+
+
+###############################################
+### Average of the 5 Generalization Errors ####
+###############################################
+## Average the Average Generalization Error Rates to determine the overall Generlaization  Error Rate for my NaiveBayes analysis ##
+AveGenError <- (gen.err.rate1 + gen.err.rate2 + gen.err.rate3 + gen.err.rate4 + gen.err.rate5) / 5
+cat('\n', 'The Overal Average Generalization Error Rate for this Naive Bayes Analysis is',AveGenError, '\n', sep = ' ')
+
+> ## Finally create the plot for the distribution probabilty range for the Petal Length attribute of the Virginica plants ##
+> curve(dnorm(x, 5.584211, 0.5159752 ), add=TRUE, col = "green")
+> 
+> 
+> ###############################################
+> ### Average of the 5 Generalization Errors ####
+> ###############################################
+> ## Average the Average Generalization Error Rates to determine the overall Generlaization  Error Rate for my NaiveBayes analysis ##
+> AveGenError <- (gen.err.rate1 + gen.err.rate2 + gen.err.rate3 + gen.err.rate4 + gen.err.rate5) / 5
+> cat('\n', 'The Overal Average Generalization Error Rate for this Naive Bayes Analysis is',AveGenError, '\n', sep = ' ')
+
+ The Overal Average Generalization Error Rate for this Naive Bayes Analysis is 0.04 
+> 
+> 
