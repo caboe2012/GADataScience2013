@@ -1,6 +1,6 @@
 ### HW2 - FOR LOOP Function for Cross-Validation Folds #### 
 
-rm(list=ls(all=TRUE))
+#rm(list=ls(all=TRUE))
 
 library(class)
 library(ggplot2)
