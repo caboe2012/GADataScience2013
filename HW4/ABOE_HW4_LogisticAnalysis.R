@@ -45,10 +45,10 @@ logit.nfold <- function(seed, n.folds) {
 		new.data$mort.prob <- predict(logit.fit, newdata=new.data, type='response')
 		new.data$mort.round <- round(new.data$mort.prob)
 		new.data$actual <- test.data$fstat
-		cat('\n', 'Fold ', fold,' Test Data Set Cross Validation Below', '\n', sep = "")
+		cat('\n', 'Fold-', fold,' Test CrossValidation Below', '\n', sep = "")
 		print(new.data)
 
-		cat('\n', 'Fold ', fold,' Confusion Matrix of Predicted versus Acutal Mortality', '\n', sep = "")
+		cat('\n', 'Fold-', fold,' Confusion Matrix of Predicted versus Acutal Mortality', '\n', sep = "")
 		xtable <- xtabs(~new.data$actual + new.data$mort.round, data=new.data)
 		print (xtable)
 
@@ -78,6 +78,7 @@ logit.nfold <- function(seed, n.folds) {
 	print (total.err.rate)
 }
 
+logit.nfold(080513, 10)
 
 logit.fit <- glm(fstat ~ age + gender + bmi + cvd + sho + chf + miord + lenfol, data =x)
 summary(logit.fit)

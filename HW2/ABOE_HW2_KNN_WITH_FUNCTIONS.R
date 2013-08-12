@@ -43,7 +43,8 @@ knn.nfold <- function(seed, n.folds, max.k) {
 			)
 			cat('\n', 'k = ', k, 'Fold = ',fold, '\n', sep = " ")
 			print(table(test.labels, knn.fit))
-			
+			print(train.data)
+
 			this.err <- sum(test.labels != knn.fit) / length(test.labels)
 			results.err.rates <- append(results.err.rates, this.err)
 				
